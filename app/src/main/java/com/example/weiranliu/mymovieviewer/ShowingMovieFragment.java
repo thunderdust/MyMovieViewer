@@ -123,7 +123,7 @@ public class ShowingMovieFragment extends Fragment {
             connection.setRequestProperty("Accept", "application/json");
             connection.connect();
             InputStream response = connection.getInputStream();
-            
+
         } catch (Exception e) {
         }
 

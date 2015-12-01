@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.weiranliu.mymovieviewer.MovieOverviewActivity">
+    <ImageView
+        android:id="@+id/iv_movie_cover"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cover"/>
+    <TextView
+        android:id="@+id/tv_movie_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_movie_cover"
+        android:background="#646CCD"
+        android:textSize="36dp"
+        android:textColor="#FFFFFF"
+        android:padding="10dp"
+        android:text="Movie Title (2014)"/>
+    <TextView
+        android:id="@+id/tv_movie_slogan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_movie_title"
+        android:background="#646CCD"
+        android:textColor="#FFFFFF"
+        android:minLines="2"
+        android:text="A movie slogan that briefly introduces the movie and attract audiences."
+        android:padding="10dp"/>
+    <LinearLayout
+        android:id="@+id/linear_layout_function_btns"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_movie_slogan"
+        android:background="#EFEFEF"
+        android:weightSum="3">
+        <ImageButton
+            android:id="@+id/btn_movie_details"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/details"/>
+        <ImageButton
+            android:id="@+id/btn_movie_related"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/related"
+            />
+        <ImageButton
+            android:id="@+id/btn_movie_favorite"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/favorite"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_movie_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_function_btns"
+        android:background="#EFEFEF"
+        android:textColor="#000000"
+        android:minLines="2"
+        android:text="A movie description will introduces the movie to the audience. It will indicate what the movie is about, how the story happens, and maybe what the possible outcome will be. Normally the movie description will not reveal everything about the movie, so that there are some unknown expectations to attract the audiences."
+        android:padding="15dp"
+        android:layout_marginBottom="15dp"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbarAlwaysDrawVerticalTrack="false"/>
+</RelativeLayout>
