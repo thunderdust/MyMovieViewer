@@ -18,19 +18,21 @@ public class DashboardActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mAdapter = new MovieViewerPagerAdapter(getSupportFragmentManager());
-        mViewPager =  (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageSelected(int position){
+            public void onPageSelected(int position) {
                 getActionBar().setSelectedNavigationItem(position);
             }
         });
+        // Default page is showing movies
+        mViewPager.setCurrentItem(0);
 
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        ActionBar.TabListener tabListener = new ActionBar.TabListener(){
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft){
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 // show the given tab
                 mViewPager.setCurrentItem(tab.getPosition());
             }
@@ -44,10 +46,8 @@ public class DashboardActivity extends FragmentActivity {
             }
         };
 
-        for (int i=0; i<TAB_COUNT; i++){
+        for (int i = 0; i < TAB_COUNT; i++) {
             actionBar.addTab(actionBar.newTab().setText(PAGE_NAMES[i]).setTabListener(tabListener));
         }
     }
-
-
 }

@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -18,7 +16,7 @@ import android.view.ViewGroup;
  * Use the {@link ShowingMovieFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShowingMovieFragment extends Fragment {
+public class FavoritedMovieFragment extends Fragment {
 
     // the fragment initialization parameters
     private static final String FRAGMENT_PAGE_COUNT = "page";
@@ -35,7 +33,7 @@ public class ShowingMovieFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param page Parameter 1.
+     * @param page  Parameter 1.
      * @param title Parameter 2.
      * @return A new instance of fragment ShowingMovieFragment.
      */
@@ -52,7 +50,7 @@ public class ShowingMovieFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mFragmentPageCount = getArguments().getInt(FRAGMENT_PAGE_COUNT, 0);
+            mFragmentPageCount = getArguments().getInt(FRAGMENT_PAGE_COUNT, 1);
             mFragmentTitle = getArguments().getString(FRAGMENT_TITLE);
         }
     }
