@@ -100,6 +100,5 @@
     <orderEntry type="library" exported="" name="gson-2.4" level="project" />
     <orderEntry type="module" module-name="retrofit-2.0.0-beta2" exported="" />
     <orderEntry type="module" module-name="universal-image-loader-1.9.5" exported="" />
-    <orderEntry type="module" module-name="javax.ws.rs" exported="" />
   </component>
 </module>

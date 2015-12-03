@@ -1,11 +1,15 @@
 package com.example.weiranliu.mymovieviewer;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.squareup.okhttp.Interceptor;
+import com.squareup.okhttp.OkHttpClient;
+
+import java.io.IOException;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -14,9 +18,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 
-
-
-public class DashboardActivity extends FragmentActivity {
+public class DashboardActivity extends FragmentActivity implements FavoritedMovieFragment.OnFragmentInteractionListener, ShowingMovieFragment.OnFragmentInteractionListener {
 
     MovieViewerPagerAdapter mAdapter;
     ViewPager mViewPager;
@@ -31,46 +33,24 @@ public class DashboardActivity extends FragmentActivity {
         mAdapter = new MovieViewerPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                getActionBar().setSelectedNavigationItem(position);
-            }
-        });
+
         // Default page is showing movies
         mViewPager.setCurrentItem(0);
-
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // show the given tab
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
-            }
-        };
-
-        for (int i = 0; i < TAB_COUNT; i++) {
-            actionBar.addTab(actionBar.newTab().setText(PAGE_NAMES[i]).setTabListener(tabListener));
-        }
+        getShowingMovies();
     }
 
     public void getShowingMovies() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.themoviedb.org").addConverterFactory(GsonConverterFactory.create()).build();
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.themoviedb.org/3")
+                .addConverterFactory(GsonConverterFactory.create()).build();
         MovieService ms = retrofit.create(MovieService.class);
-        Call<MovieList> call = ms.loadMovies(API_KEY);
-        call.enqueue(new Callback<MovieList>() {
+        Call<Movie> call = ms.getMovie("1", API_KEY);
+        call.enqueue(new Callback<Movie>() {
                          @Override
-                         public void onResponse(Response<MovieList> response, Retrofit retrofit) {
+                         public void onResponse(Response<Movie> response, Retrofit retrofit) {
                              int statusCode = response.code();
-                             MovieList list = response.body();
+                             Log.d("DASHBOARD____________", Integer.toString(statusCode));
+                             Movie m = response.body();
                          }
 
                          @Override
@@ -79,5 +59,17 @@ public class DashboardActivity extends FragmentActivity {
                          }
                      }
         );
+
+
+    }
+
+    @Override
+    public void onFavoritedFragmentInteraction(String s) {
+        // do stuff
+    }
+
+    @Override
+    public void onShowingMovieFragmentInteraction(String s) {
+        // do stuff
     }
 }

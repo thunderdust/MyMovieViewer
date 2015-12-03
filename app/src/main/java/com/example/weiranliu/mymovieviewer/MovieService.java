@@ -22,11 +22,4 @@ public interface MovieService {
 
     @GET("/movie/{id}/similar")
     Call<Movie> getSimilarMovies(@Path("id") String id, @Query("api_key") String api_key);
-
-
-
-
-
-
-
 }
