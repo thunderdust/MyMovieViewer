@@ -4,18 +4,19 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.util.List;
 
-import retrofit.Call;
 import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.android.AndroidLog;
+import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 
 public class DashboardActivity extends FragmentActivity implements FavoritedMovieFragment.OnFragmentInteractionListener, ShowingMovieFragment.OnFragmentInteractionListener {
@@ -24,8 +25,11 @@ public class DashboardActivity extends FragmentActivity implements FavoritedMovi
     ViewPager mViewPager;
     final int TAB_COUNT = 2;
     final String[] PAGE_NAMES = {"Now Showing", "My Favorite"};
-    private static final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
+    final String DEBUG_TAG = "DashBoardActivity";
 
+    Picasso picasso;
+    private static final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
+    MovieService ms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,33 +38,54 @@ public class DashboardActivity extends FragmentActivity implements FavoritedMovi
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mAdapter);
 
+        Gson gson = (new GsonBuilder()).create();
+
+        ms = (new RestAdapter.Builder()
+                .setEndpoint("http://api.themoviedb.org/3/")
+                .setConverter(new GsonConverter(gson))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLog(new AndroidLog("NETWORK"))
+                .build()).create(MovieService.class);
+
+        picasso =  (new Picasso.Builder(this)).build();
         // Default page is showing movies
         mViewPager.setCurrentItem(0);
         getShowingMovies();
     }
 
-    public void getShowingMovies() {
+    public void getMovieById(int id) {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://api.themoviedb.org/3")
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        MovieService ms = retrofit.create(MovieService.class);
-        Call<Movie> call = ms.getMovie("1", API_KEY);
-        call.enqueue(new Callback<Movie>() {
-                         @Override
-                         public void onResponse(Response<Movie> response, Retrofit retrofit) {
-                             int statusCode = response.code();
-                             Log.d("DASHBOARD____________", Integer.toString(statusCode));
-                             Movie m = response.body();
-                         }
+        Callback<Movie> callback = new Callback<Movie>() {
+            @Override
+            public void success(Movie movie, Response response) {
+                Log.d(DEBUG_TAG, "title:"+movie.title);
+                Log.d(DEBUG_TAG, "backdrop:"+movie.backdrop_path);
+                Log.d(DEBUG_TAG, "overview:"+movie.overview);
+                //picasso.load(movie.backdrop_link);
+            }
 
-                         @Override
-                         public void onFailure(Throwable t) {
-                             Toast.makeText(DashboardActivity.this, t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                         }
-                     }
-        );
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(DEBUG_TAG, error.getMessage());
+            }
+        };
 
+        ms.getMovie(id, API_KEY, callback);
+    }
 
+    public void getShowingMovies(){
+        Callback<MovieList> cb = new Callback<MovieList>() {
+            @Override
+            public void success(MovieList movieList, Response response) {
+                Log.d(DEBUG_TAG, "size:"+ movieList.results.size());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(DEBUG_TAG, error.getMessage());
+            }
+        };
+        ms.loadShowingMovies(API_KEY, cb);
     }
 
     @Override

@@ -1,1 +1,1 @@
-include ':app', ':universal-image-loader-1.9.5', ':retrofit-2.0.0-beta2', ':javax.ws.rs'
+include ':app', ':universal-image-loader-1.9.5', ':javax.ws.rs'

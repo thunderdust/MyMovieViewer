@@ -6,5 +6,14 @@ package com.example.weiranliu.mymovieviewer;
 public class Movie {
 
     String title;
-    String backdrop_link;
+    String backdrop_path;
+    boolean adult;
+    boolean video;
+    String overview;
+    int budget;
+    String original_language;
+    String release_date;
+    String status;
+    String tagline;
+    String vote_average;
 }
