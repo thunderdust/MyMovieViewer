@@ -16,4 +16,5 @@ public class Movie {
     String status;
     String tagline;
     String vote_average;
+    int id;
 }

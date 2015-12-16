@@ -1,12 +1,28 @@
 package com.example.weiranliu.mymovieviewer;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.net.URL;
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.android.AndroidLog;
+import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 
 /**
@@ -22,13 +38,18 @@ public class ShowingMovieFragment extends Fragment {
     // the fragment initialization parameters
     private static final String FRAGMENT_PAGE_COUNT = "page";
     private static final String FRAGMENT_TITLE = "title";
-
     private int mFragmentPageCount;
     private String mFragmentTitle;
-
     private OnFragmentInteractionListener mListener;
 
+    private GridView mGridView;
+    private MovieViewAdapter mAdapter;
+    private ArrayList<String> mCoverImageUriList;
+    private MovieService ms;
+
     private final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
+    private final String DEBUG_TAG = "ShowingMovieFragment";
+    private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
     /**
      * Use this factory method to create a new instance of
@@ -54,6 +75,16 @@ public class ShowingMovieFragment extends Fragment {
             mFragmentPageCount = getArguments().getInt(FRAGMENT_PAGE_COUNT, 0);
             mFragmentTitle = getArguments().getString(FRAGMENT_TITLE);
         }
+        Gson gson = (new GsonBuilder()).create();
+        ms = (new RestAdapter.Builder()
+                .setEndpoint("http://api.themoviedb.org/3/")
+                .setConverter(new GsonConverter(gson))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLog(new AndroidLog("NETWORK"))
+                .build()).create(MovieService.class);
+        // must execute before initiate movie view adapter to get the image URLs
+        getShowingMovies(1);
+
     }
 
     @Override
@@ -95,4 +126,68 @@ public class ShowingMovieFragment extends Fragment {
         public void onShowingMovieFragmentInteraction(String s);
     }
 
+    public void getMovieById(int id) {
+
+        Callback<Movie> callback = new Callback<Movie>() {
+            @Override
+            public void success(Movie movie, Response response) {
+                Log.d(DEBUG_TAG, "title:" + movie.title);
+                Log.d(DEBUG_TAG, "backdrop:"+movie.backdrop_path);
+                Log.d(DEBUG_TAG, "overview:"+movie.overview);
+                //picasso.load(movie.backdrop_link);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(DEBUG_TAG, error.getMessage());
+            }
+        };
+
+        ms.getMovie(id, API_KEY, callback);
+    }
+
+    public void getShowingMovies(int page){
+        Callback<MovieList> cb = new Callback<MovieList>() {
+            @Override
+            public void success(MovieList movieList, Response response) {
+                Log.d(DEBUG_TAG, "size:"+ movieList.results.size());
+                loadMovieGridView(movieList);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(DEBUG_TAG, error.getMessage());
+            }
+        };
+        ms.loadShowingMovies(API_KEY, page, cb);
+    }
+
+    private void loadMovieGridView(MovieList ml){
+
+        if (mCoverImageUriList!=null) {
+            for (Movie m: ml.results){
+                String imageName = m.backdrop_path;
+                String url = IMAGE_BASE_URL + imageName;
+                try {
+                    mCoverImageUriList.add(url);
+                }
+                catch (Exception e){
+                    Log.e(DEBUG_TAG, e.getMessage());
+                }
+            }
+            mGridView = (GridView) getActivity().findViewById(R.id.gv_showing_movie);
+            mCoverImageUriList = new ArrayList<String>();
+            mAdapter = new MovieViewAdapter(getContext(), R.layout.grid_item_layout, mCoverImageUriList);
+            mGridView.setAdapter(mAdapter);
+            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    View item = (View) parent.getItemAtPosition(position);
+                    MovieViewAdapter.ViewHolder vh = (MovieViewAdapter.ViewHolder) item.getTag();
+                    int movieId = vh.movieId;
+                    Log.d(DEBUG_TAG, "Movie ID: "+ movieId);
+                }
+            });
+        }
+    }
 }

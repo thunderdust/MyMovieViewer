@@ -14,7 +14,7 @@ public interface MovieService {
 
 
     @GET("/movie/now_playing")
-    void loadShowingMovies(@Query("api_key") String api_key, Callback<MovieList> cb);
+    void loadShowingMovies(@Query("api_key") String api_key, @Query("page") int page, Callback<MovieList> cb);
 
     @GET("/movie/{id}")
     void getMovie(@Path("id") int id, @Query("api_key") String api_key, Callback<Movie> cb);
