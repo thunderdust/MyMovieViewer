@@ -7,5 +7,6 @@ import java.util.List;
  */
 public class MovieList {
 
-    List<Movie> items;
+    int page;
+    List<Movie> results;
 }
