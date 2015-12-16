@@ -29,7 +29,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
     private final String DEBUG_TAG = "Movie Details";
     private int mMovieId;
-    private HashMap<Integer, String> mMovieGenreMap;
+    //private HashMap<Integer, String> mMovieGenreMap;
 
     // UI Components
     private TextView mGenreTextView;
@@ -64,7 +64,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setLog(new AndroidLog("NETWORK"))
                 .build()).create(MovieService.class);
-        mMovieGenreMap = new HashMap<Integer, String>();
+        //mMovieGenreMap = new HashMap<Integer, String>();
         //getMovieGenres();
         getMovieDetails(mMovieId);
     }
@@ -74,7 +74,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void success(ArrayList<Genre> genreList, Response response) {
                 for (Genre g : genreList) {
-                    mMovieGenreMap.put(g.id, g.name);
+                    //mMovieGenreMap.put(g.id, g.name);
                 }
             }
 
@@ -133,13 +133,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         mDateTextView.setText(m.release_date);
 
         // Update runtime
-        mRuntimeTextView.setText(m.runtime);
+        mRuntimeTextView.setText(String.valueOf(m.runtime));
 
         // Update rating
-        mRatingTextView.setText(" " + m.vote_average);
+        mRatingTextView.setText(String.valueOf(m.vote_average));
 
         // Update rate count
-        mRateCountTextView.setText(m.vote_count);
+        mRateCountTextView.setText(String.valueOf(m.vote_count));
 
         // Update adult only
         if (m.adult) {

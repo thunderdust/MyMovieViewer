@@ -133,7 +133,6 @@ public class ShowingMovieFragment extends Fragment {
                 Log.d(DEBUG_TAG, "title:" + movie.title);
                 Log.d(DEBUG_TAG, "backdrop:" + movie.backdrop_path);
                 Log.d(DEBUG_TAG, "overview:" + movie.overview);
-                //picasso.load(movie.backdrop_link);
             }
 
             @Override
@@ -178,7 +177,7 @@ public class ShowingMovieFragment extends Fragment {
                 Movie item = (Movie) parent.getItemAtPosition(position);
                 int movieId = item.id;
                 Log.d(DEBUG_TAG, "Movie ID: " + movieId);
-                Intent toMovieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class);
+                Intent toMovieDetailIntent = new Intent(getActivity(), MovieOverviewActivity.class);
                 toMovieDetailIntent.putExtra("id", movieId);
                 startActivity(toMovieDetailIntent);
             }
