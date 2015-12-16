@@ -17,9 +17,10 @@ public class Movie {
     String release_date;
     String status;
     String tagline;
-    String vote_average;
+    float vote_average;
+    int vote_count;
     int id;
+    int runtime;
     ArrayList<Genre> genres;
     ArrayList<Language> spoken_languages;
-
 }

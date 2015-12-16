@@ -35,6 +35,11 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView mGenreTextView;
     private TextView mBudgetTextView;
     private TextView mLanguageTextView;
+    private TextView mDateTextView;
+    private TextView mRuntimeTextView;
+    private TextView mRatingTextView;
+    private TextView mRateCountTextView;
+    private TextView mAdultOnlyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         mGenreTextView = (TextView) findViewById(R.id.tv_movie_genre_content);
         mBudgetTextView = (TextView) findViewById(R.id.tv_movie_budget_content);
         mLanguageTextView = (TextView) findViewById(R.id.tv_movie_language_content);
+        mDateTextView = (TextView) findViewById(R.id.tv_release_date_content);
+        mRuntimeTextView = (TextView) findViewById(R.id.tv_runtime_content);
+        mRateCountTextView = (TextView) findViewById(R.id.tv_rate_count_content);
+        mRatingTextView = (TextView) findViewById(R.id.tv_rate_content);
+        mAdultOnlyTextView = (TextView) findViewById(R.id.tv_rate_adult_content);
 
         Gson gson = (new GsonBuilder()).create();
         ms = (new RestAdapter.Builder()
@@ -118,5 +128,26 @@ public class MovieDetailActivity extends AppCompatActivity {
         // Remove the last ", "
         languages = languages.substring(0, languages.length() - 2);
         mLanguageTextView.setText(languages);
+
+        // Update date
+        mDateTextView.setText(m.release_date);
+
+        // Update runtime
+        mRuntimeTextView.setText(m.runtime);
+
+        // Update rating
+        mRatingTextView.setText(" " + m.vote_average);
+
+        // Update rate count
+        mRateCountTextView.setText(m.vote_count);
+
+        // Update adult only
+        if (m.adult) {
+            mAdultOnlyTextView.setText("Yes");
+            mAdultOnlyTextView.setBackgroundColor(getResources().getColor(R.color.colorWarning));
+        } else {
+            mAdultOnlyTextView.setText("No");
+            mAdultOnlyTextView.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+        }
     }
 }
