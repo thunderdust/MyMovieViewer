@@ -51,7 +51,7 @@ public class MovieViewAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
         Picasso.with(context).load(IMAGE_BASE_URL + data.get(position).backdrop_path).placeholder(R.drawable.place_holder).
-                error(R.drawable.error_loading).resize(100,160).centerCrop().into(holder.imageView);
+                error(R.drawable.no_image).fit().centerCrop().into(holder.imageView);
         return row;
     }
 

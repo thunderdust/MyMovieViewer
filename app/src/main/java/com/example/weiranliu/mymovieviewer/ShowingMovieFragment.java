@@ -168,7 +168,7 @@ public class ShowingMovieFragment extends Fragment {
         for (Movie m : ml.results) {
             mMovieList.add(m);
         }
-        mGridView = (GridView) getActivity().findViewById(R.id.gv_showing_movie);
+        mGridView = (GridView) getActivity().findViewById(R.id.gv_showing_movies);
         mAdapter = new MovieViewAdapter(getContext(), R.layout.movie_item_layout, mMovieList);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -177,9 +177,9 @@ public class ShowingMovieFragment extends Fragment {
                 Movie item = (Movie) parent.getItemAtPosition(position);
                 int movieId = item.id;
                 Log.d(DEBUG_TAG, "Movie ID: " + movieId);
-                Intent toMovieDetailIntent = new Intent(getActivity(), MovieOverviewActivity.class);
-                toMovieDetailIntent.putExtra("id", movieId);
-                startActivity(toMovieDetailIntent);
+                Intent toMovieOverviewIntent = new Intent(getActivity(), MovieOverviewActivity.class);
+                toMovieOverviewIntent.putExtra("id", movieId);
+                startActivity(toMovieOverviewIntent);
             }
         });
     }

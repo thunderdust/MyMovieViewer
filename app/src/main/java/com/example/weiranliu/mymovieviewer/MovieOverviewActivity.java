@@ -100,7 +100,7 @@ public class MovieOverviewActivity extends AppCompatActivity {
         this.picasso = (new Picasso.Builder(this)).build();
         String imageName = m.backdrop_path;
         Picasso.with(this).load(IMAGE_BASE_URL + imageName).placeholder(R.drawable.place_holder).
-                error(R.drawable.error_loading).fit().centerCrop().into(mMovieCover);
+                error(R.drawable.no_image).fit().centerCrop().into(mMovieCover);
     }
 
     private void setButtons(){
@@ -115,6 +115,15 @@ public class MovieOverviewActivity extends AppCompatActivity {
                 Intent toMovieDetail = new Intent(v.getContext(), MovieDetailActivity.class);
                 toMovieDetail.putExtra("id", mMovieId);
                 v.getContext().startActivity(toMovieDetail);
+            }
+        });
+
+        mRelatedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toSimilarMovies = new Intent(v.getContext(), SimilarMoviesActivity.class);
+                toSimilarMovies.putExtra("id", mMovieId);
+                v.getContext().startActivity(toSimilarMovies);
             }
         });
 

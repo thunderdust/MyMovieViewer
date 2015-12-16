@@ -23,5 +23,8 @@ public interface MovieService {
     @GET("/genre/movie/list")
     void getGenreList(@Query("api_key") String api_key, Callback<ArrayList<Genre>> cb);
 
+    @GET("/movie/{id}/similar")
+    void getSimilarMovies(@Path("id") int id, @Query("api_key") String api_key, @Query("page") int page, Callback<MovieList> cb);
+
 
 }
