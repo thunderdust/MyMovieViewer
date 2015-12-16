@@ -1,109 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.weiranliu.mymovieviewer.MovieDetailActivity">
+
     <LinearLayout
         android:id="@+id/linear_layout_genre"
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:weightSum="4"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
         android:orientation="horizontal"
-        android:background="#EFEFEF">
+        android:weightSum="6">
+
         <TextView
             android:id="@+id/tv_movie_genre_title"
-            android:text="Genres"
-            android:textStyle="bold"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
             android:padding="5dp"
-            android:layout_height="wrap_content"/>
+            android:text="Genres"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tv_movie_genre_content"
-            android:text="Default Genres"
-            android:textStyle="bold"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:padding="5dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"/>
+            android:text="Default Genres"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear_layout_budget"
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:weightSum="4"
+        android:layout_height="wrap_content"
         android:layout_below="@id/linear_layout_genre"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
         android:orientation="horizontal"
-        android:background="#EFEFEF">
+        android:weightSum="6">
+
         <TextView
             android:id="@+id/tv_movie_budget_title"
-            android:text="Budget"
-            android:textStyle="bold"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
             android:padding="5dp"
-            android:layout_height="wrap_content"/>
+            android:text="Budget"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tv_movie_budget_content"
-            android:text="$9,999,999"
-            android:textStyle="bold"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:padding="5dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"/>
+            android:text="$9,999,999"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear_layout_language"
-        android:layout_below="@id/linear_layout_budget"
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:weightSum="4"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_budget"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
         android:orientation="horizontal"
-        android:background="#EFEFEF">
+        android:weightSum="6">
+
         <TextView
             android:id="@+id/tv_movie_language_title"
-            android:text="Language"
-            android:textStyle="bold"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
             android:padding="5dp"
-            android:layout_height="wrap_content"/>
+            android:text="Language"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tv_movie_language_content"
-            android:text="Default Language"
-            android:textStyle="bold"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:padding="5dp"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"/>
+            android:text="Default Language"
+            android:textStyle="bold" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/tv_movie_trailers"
-        android:layout_height="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/linear_layout_release_date"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/linear_layout_language"
-        android:padding="10dp"
-        android:textColor="#000000"
-        android:textSize="18dp"
-        android:text="Trailers"
-        android:visibility="invisible"
-        />
-    <GridView
-        android:id="@+id/gv_movie_trailers"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_below="@id/tv_movie_trailers"
         android:layout_margin="5dp"
-        android:columnWidth="180dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="3dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:visibility="invisible"
-        />
+        android:background="#EFEFEF"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/tv_release_date_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
+            android:padding="5dp"
+            android:text="Release Date"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_release_date_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="2015-01-01"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_runtime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_release_date"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/tv_runtime_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
+            android:padding="5dp"
+            android:text="Runtime"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_runtime_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="101 mins"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_rate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_runtime"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/tv_rate_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
+            android:padding="5dp"
+            android:text="Average Rating"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_rate_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="6.0"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_rate_count"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_rate"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/tv_rate_count_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
+            android:padding="5dp"
+            android:text="Number of Rates"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_rate_count_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:padding="5dp"
+            android:text="100"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_adult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linear_layout_rate_count"
+        android:layout_margin="5dp"
+        android:background="#EFEFEF"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <TextView
+            android:id="@+id/tv_rate_adult_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorSky"
+            android:padding="5dp"
+            android:text="Adults Only"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_rate_adult_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:background="@color/colorGreen"
+            android:padding="5dp"
+            android:text="No"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 </RelativeLayout>

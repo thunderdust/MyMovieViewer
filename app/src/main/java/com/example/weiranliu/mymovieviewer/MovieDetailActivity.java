@@ -35,10 +35,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView mGenreTextView;
     private TextView mBudgetTextView;
     private TextView mLanguageTextView;
-    private ImageView mTrailerImageView1;
-    private ImageView mTrailerImageView2;
-    private TextView mTrailerTitleTextView;
-    private GridView mTrailerGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +46,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         mGenreTextView = (TextView) findViewById(R.id.tv_movie_genre_content);
         mBudgetTextView = (TextView) findViewById(R.id.tv_movie_budget_content);
         mLanguageTextView = (TextView) findViewById(R.id.tv_movie_language_content);
-        mTrailerTitleTextView = (TextView) findViewById(R.id.tv_movie_trailers);
-        mTrailerGridView = (GridView) findViewById(R.id.gv_movie_trailers);
 
         Gson gson = (new GsonBuilder()).create();
         ms = (new RestAdapter.Builder()
@@ -101,12 +95,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         String title = m.title;
         setTitle(title);
-        // Initiate movie trailer views only if has video
-        if (m.video) {
-            mTrailerTitleTextView.setVisibility(View.VISIBLE);
-            mTrailerGridView.setVisibility(View.VISIBLE);
-            setUpTrailers();
-        }
 
         // Update movie genres
         String genre = "";
@@ -130,9 +118,5 @@ public class MovieDetailActivity extends AppCompatActivity {
         // Remove the last ", "
         languages = languages.substring(0, languages.length() - 2);
         mLanguageTextView.setText(languages);
-    }
-
-    private void setUpTrailers(){
-
     }
 }
