@@ -1,5 +1,6 @@
 package com.example.weiranliu.mymovieviewer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -19,10 +20,8 @@ public interface MovieService {
     @GET("/movie/{id}")
     void getMovie(@Path("id") int id, @Query("api_key") String api_key, Callback<Movie> cb);
 
+    @GET("/genre/movie/list")
+    void getGenreList(@Query("api_key") String api_key, Callback<ArrayList<Genre>> cb);
 
-//    @GET("/movie/{id}/videos")
-//    Call<Movie> getTrailers(@Path("id") String id, @Query("api_key") String api_key);
-//
-//    @GET("/movie/{id}/similar")
-//    Call<Movie> getSimilarMovies(@Path("id") String id, @Query("api_key") String api_key);
+
 }

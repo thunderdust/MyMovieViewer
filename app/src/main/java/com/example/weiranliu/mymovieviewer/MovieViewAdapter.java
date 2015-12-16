@@ -25,6 +25,8 @@ public class MovieViewAdapter extends ArrayAdapter {
     private ArrayList<Movie> data = new ArrayList<Movie>();
     private Picasso picasso;
 
+    private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
+
     public MovieViewAdapter(Context context, int layoutResourceId, ArrayList data){
         super(context, layoutResourceId, data);
         this.context = context;
@@ -48,8 +50,8 @@ public class MovieViewAdapter extends ArrayAdapter {
         else {
             holder = (ViewHolder) row.getTag();
         }
-        Picasso.with(context).load(data.get(position).backdrop_path).placeholder(R.drawable.place_holder).
-                error(R.drawable.error_loading).centerCrop().into(holder.imageView);
+        Picasso.with(context).load(IMAGE_BASE_URL + data.get(position).backdrop_path).placeholder(R.drawable.place_holder).
+                error(R.drawable.error_loading).resize(100,160).centerCrop().into(holder.imageView);
         return row;
     }
 

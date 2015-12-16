@@ -1,7 +1,7 @@
 package com.example.weiranliu.mymovieviewer;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,7 +14,6 @@ import android.widget.GridView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 import retrofit.Callback;
@@ -44,18 +43,18 @@ public class ShowingMovieFragment extends Fragment {
 
     private GridView mGridView;
     private MovieViewAdapter mAdapter;
-    private ArrayList<String> mCoverImageUriList;
+    private ArrayList<Movie> mMovieList;
+    private int mLoadedPageCount = 0;
     private MovieService ms;
 
     private final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
     private final String DEBUG_TAG = "ShowingMovieFragment";
-    private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param page Parameter 1.
+     * @param page  Parameter 1.
      * @param title Parameter 2.
      * @return A new instance of fragment ShowingMovieFragment.
      */
@@ -132,8 +131,8 @@ public class ShowingMovieFragment extends Fragment {
             @Override
             public void success(Movie movie, Response response) {
                 Log.d(DEBUG_TAG, "title:" + movie.title);
-                Log.d(DEBUG_TAG, "backdrop:"+movie.backdrop_path);
-                Log.d(DEBUG_TAG, "overview:"+movie.overview);
+                Log.d(DEBUG_TAG, "backdrop:" + movie.backdrop_path);
+                Log.d(DEBUG_TAG, "overview:" + movie.overview);
                 //picasso.load(movie.backdrop_link);
             }
 
@@ -146,12 +145,13 @@ public class ShowingMovieFragment extends Fragment {
         ms.getMovie(id, API_KEY, callback);
     }
 
-    public void getShowingMovies(int page){
+    public void getShowingMovies(int page) {
         Callback<MovieList> cb = new Callback<MovieList>() {
             @Override
             public void success(MovieList movieList, Response response) {
-                Log.d(DEBUG_TAG, "size:"+ movieList.results.size());
+                Log.d(DEBUG_TAG, "size:" + movieList.results.size());
                 loadMovieGridView(movieList);
+                mLoadedPageCount ++;
             }
 
             @Override
@@ -162,32 +162,26 @@ public class ShowingMovieFragment extends Fragment {
         ms.loadShowingMovies(API_KEY, page, cb);
     }
 
-    private void loadMovieGridView(MovieList ml){
+    private void loadMovieGridView(MovieList ml) {
 
-        if (mCoverImageUriList!=null) {
-            for (Movie m: ml.results){
-                String imageName = m.backdrop_path;
-                String url = IMAGE_BASE_URL + imageName;
-                try {
-                    mCoverImageUriList.add(url);
-                }
-                catch (Exception e){
-                    Log.e(DEBUG_TAG, e.getMessage());
-                }
-            }
-            mGridView = (GridView) getActivity().findViewById(R.id.gv_showing_movie);
-            mCoverImageUriList = new ArrayList<String>();
-            mAdapter = new MovieViewAdapter(getContext(), R.layout.grid_item_layout, mCoverImageUriList);
-            mGridView.setAdapter(mAdapter);
-            mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    View item = (View) parent.getItemAtPosition(position);
-                    MovieViewAdapter.ViewHolder vh = (MovieViewAdapter.ViewHolder) item.getTag();
-                    int movieId = vh.movieId;
-                    Log.d(DEBUG_TAG, "Movie ID: "+ movieId);
-                }
-            });
+        Log.d(DEBUG_TAG, "loading movie gridviews.");
+        mMovieList = new ArrayList<Movie>();
+        for (Movie m : ml.results) {
+            mMovieList.add(m);
         }
+        mGridView = (GridView) getActivity().findViewById(R.id.gv_showing_movie);
+        mAdapter = new MovieViewAdapter(getContext(), R.layout.movie_item_layout, mMovieList);
+        mGridView.setAdapter(mAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie item = (Movie) parent.getItemAtPosition(position);
+                int movieId = item.id;
+                Log.d(DEBUG_TAG, "Movie ID: " + movieId);
+                Intent toMovieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class);
+                toMovieDetailIntent.putExtra("id", movieId);
+                startActivity(toMovieDetailIntent);
+            }
+        });
     }
 }

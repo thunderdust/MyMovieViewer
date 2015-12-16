@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_movie_genre_content"
-            android:text="Thrill, Adventure, Drama"
+            android:text="Default Genres"
             android:textStyle="bold"
             android:layout_width="0dp"
             android:padding="5dp"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_movie_budget_content"
-            android:text="$55,000,000"
+            android:text="$9,999,999"
             android:textStyle="bold"
             android:layout_width="0dp"
             android:padding="5dp"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_movie_language_content"
-            android:text="English"
+            android:text="Default Language"
             android:textStyle="bold"
             android:layout_width="0dp"
             android:padding="5dp"
@@ -90,31 +90,20 @@
         android:textColor="#000000"
         android:textSize="18dp"
         android:text="Trailers"
+        android:visibility="invisible"
         />
-    <LinearLayout android:id="@+id/linear_layout_trailers"
-        android:orientation="horizontal"
-        android:layout_below="@id/linear_layout_language"
+    <GridView
+        android:id="@+id/gv_movie_trailers"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:background="#EFEFEF"
-        android:weightSum="2">
-        <ImageView
-            android:id="@+id/vv_trailer1"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:src="@drawable/cover"
-            android:background="#000000"/>
-        <ImageView
-            android:id="@+id/vv_trailer2"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:src="@drawable/cover"
-            android:background="#000000"/>
-    </LinearLayout>
-
-
+        android:layout_below="@id/tv_movie_trailers"
+        android:layout_margin="5dp"
+        android:columnWidth="180dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="3dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="invisible"
+        />
 </RelativeLayout>

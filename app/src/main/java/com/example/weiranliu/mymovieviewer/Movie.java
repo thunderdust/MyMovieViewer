@@ -1,5 +1,7 @@
 package com.example.weiranliu.mymovieviewer;
 
+import java.util.ArrayList;
+
 /**
  * Created by weiran.liu on 12/2/2015.
  */
@@ -17,4 +19,7 @@ public class Movie {
     String tagline;
     String vote_average;
     int id;
+    ArrayList<Genre> genres;
+    ArrayList<Language> spoken_languages;
+
 }

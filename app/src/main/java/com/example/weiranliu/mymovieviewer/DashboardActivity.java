@@ -36,7 +36,6 @@ public class DashboardActivity extends FragmentActivity implements FavoritedMovi
         mAdapter = new MovieViewerPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mAdapter);
-
         // Default page is showing movies
         mViewPager.setCurrentItem(0);
     }
