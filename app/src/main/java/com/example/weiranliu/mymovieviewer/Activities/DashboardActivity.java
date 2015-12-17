@@ -1,22 +1,13 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.Activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.android.AndroidLog;
-import retrofit.client.Response;
-import retrofit.converter.GsonConverter;
+import com.example.weiranliu.mymovieviewer.Fragments.FavoritedMovieFragment;
+import com.example.weiranliu.mymovieviewer.Adapters.MovieViewerPagerAdapter;
+import com.example.weiranliu.mymovieviewer.R;
+import com.example.weiranliu.mymovieviewer.Fragments.ShowingMovieFragment;
 
 
 public class DashboardActivity extends FragmentActivity implements FavoritedMovieFragment.OnFragmentInteractionListener, ShowingMovieFragment.OnFragmentInteractionListener {

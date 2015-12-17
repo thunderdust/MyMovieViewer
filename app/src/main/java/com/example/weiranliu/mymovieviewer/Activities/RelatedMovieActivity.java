@@ -1,7 +1,9 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.weiranliu.mymovieviewer.R;
 
 public class RelatedMovieActivity extends AppCompatActivity {
 

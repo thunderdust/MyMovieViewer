@@ -1,20 +1,20 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Genre;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Language;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieService;
+import com.example.weiranliu.mymovieviewer.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;

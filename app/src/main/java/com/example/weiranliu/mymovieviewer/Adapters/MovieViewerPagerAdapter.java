@@ -1,9 +1,12 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.Adapters;
 
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.example.weiranliu.mymovieviewer.Fragments.FavoritedMovieFragment;
+import com.example.weiranliu.mymovieviewer.Fragments.ShowingMovieFragment;
 
 /**
  * Created by weiran.liu on 11/30/2015.

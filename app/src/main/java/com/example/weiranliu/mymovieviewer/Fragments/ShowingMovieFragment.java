@@ -1,4 +1,4 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.weiranliu.mymovieviewer.Activities.MovieOverviewActivity;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieList;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieService;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieViewAdapter;
+import com.example.weiranliu.mymovieviewer.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

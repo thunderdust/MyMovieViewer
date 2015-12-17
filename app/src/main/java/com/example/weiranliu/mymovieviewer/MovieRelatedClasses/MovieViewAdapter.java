@@ -1,18 +1,17 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.MovieRelatedClasses;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
+import com.example.weiranliu.mymovieviewer.R;
 import com.squareup.picasso.Picasso;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 /**

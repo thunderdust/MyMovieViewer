@@ -1,4 +1,4 @@
-package com.example.weiranliu.mymovieviewer;
+package com.example.weiranliu.mymovieviewer.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,10 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieList;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieService;
+import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieViewAdapter;
+import com.example.weiranliu.mymovieviewer.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
