@@ -23,6 +23,7 @@ import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Language;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieViewAdapter;
 import com.example.weiranliu.mymovieviewer.R;
+import com.example.weiranliu.mymovieviewer.Utils.Toaster;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class FavoritedMovieFragment extends Fragment {
     private String mFragmentTitle;
     private OnFragmentInteractionListener mListener;
 
-
+    private Toaster mToaster;
     private GridView mGridView;
     private MovieViewAdapter mAdapter;
     private ArrayList<Movie> mMovieList;
@@ -98,9 +99,7 @@ public class FavoritedMovieFragment extends Fragment {
         mDbHelper = new MovieDbHelper(getContext());
         mMovieDB = mDbHelper.getWritableDatabase();
         mMovieList = new ArrayList<Movie>();
-        // must load movies to mMovieList before load the list with adapter
-        loadFavoritedMovies();
-        loadMovieGridView();
+        mToaster = new Toaster(getContext());
     }
 
     @Override
@@ -108,8 +107,11 @@ public class FavoritedMovieFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(DEBUG_TAG, "CREATING THE VIEW");
         // Inflate the layout for this fragment
-        LinearLayout root = (LinearLayout)inflater.inflate(R.layout.fragment_favourited_movie, container, false);
+        LinearLayout root = (LinearLayout) inflater.inflate(R.layout.fragment_favourited_movie, container, false);
         mGridView = (GridView) root.findViewById(R.id.gv_favourited_movies);
+        // must load movies to mMovieList before load the list with adapter
+        loadFavoritedMovies();
+        loadMovieGridView();
         return root;
     }
 
@@ -147,6 +149,7 @@ public class FavoritedMovieFragment extends Fragment {
 
     private void loadFavoritedMovies() {
 
+        Log.d(DEBUG_TAG, "Loading favourited movies");
         // sort by id ascending
         String sortOrder = MovieContract.MovieEntry._ID + " ASC";
         Cursor c = mMovieDB.query(
@@ -158,13 +161,21 @@ public class FavoritedMovieFragment extends Fragment {
                 null,                                 // don't filter by row groups
                 sortOrder                             // The sort order
         );
-        c.moveToFirst();
-        while (!c.isLast()) {
+
+        if (c.getCount() != 0) {
+            Log.d(DEBUG_TAG, "Movie entry count: " + c.getCount());
+            c.moveToFirst();
+            while (!c.isLast()) {
+                loadMovieFromDBToList(c, mMovieList);
+                c.moveToNext();
+            }
+            // last row
             loadMovieFromDBToList(c, mMovieList);
-            c.moveToNext();
+
+        } else {
+            Log.d(DEBUG_TAG, "NO MOVIES YET");
+            mToaster.toastLong("No favourited movie yet.");
         }
-        // last row
-        loadMovieFromDBToList(c, mMovieList);
     }
 
     private void loadMovieFromDBToList(Cursor c, ArrayList<Movie> list) {
