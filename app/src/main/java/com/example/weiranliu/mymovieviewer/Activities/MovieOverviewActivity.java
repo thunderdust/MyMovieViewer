@@ -3,7 +3,10 @@ package com.example.weiranliu.mymovieviewer.Activities;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +25,10 @@ import com.example.weiranliu.mymovieviewer.Utils.Toaster;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -56,6 +62,8 @@ public class MovieOverviewActivity extends AppCompatActivity {
     private SQLiteDatabase mMovieDB;
     private Toaster mToaster;
     private boolean mIsMovieFavorited;
+
+    private final String IMAGE_FOLDER_PATH = "MyMovieViewer/img/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,24 +155,25 @@ public class MovieOverviewActivity extends AppCompatActivity {
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mIsMovieFavorited){
+                if (!mIsMovieFavorited) {
 
                     if (mMovie != null) {
-                        if (saveFavoritedMovieInDB(mMovie)){
+                        if (saveFavoritedMovieInDB(mMovie)) {
+                            saveImage(mMovie.backdrop_path);
                             mIsMovieFavorited = true;
                             mToaster.toastLong(mMovie.title + " has been added to your favorite list.");
-                        }
-                        else {
+                            mFavoriteButton.setImageResource(R.drawable.favorited);
+                        } else {
                             mToaster.toastLong("Failed to add " + mMovie.title + " as favorite movie.");
                         }
                     } else {
                         Log.e(DEBUG_TAG, "Current movie is NULL, unable to save");
                         mToaster.toastLong("Error: Movie item is not found.");
                     }
-                }
-                else {
+                } else {
                     // delete favorited movie
                     mIsMovieFavorited = false;
+                    mFavoriteButton.setImageResource(R.drawable.favorite);
                     mToaster.toastShort("Canceled Favorite");
                 }
             }
@@ -216,11 +225,43 @@ public class MovieOverviewActivity extends AppCompatActivity {
                 null,
                 values
         );
-        if (newRowID==-1){
+        if (newRowID == -1) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
+    }
+
+    private void saveImage(final String imagePath) {
+
+        Target t = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                String filePath = IMAGE_FOLDER_PATH + imagePath;
+                File f = new File(Environment.getExternalStorageDirectory(), filePath);
+                if (!f.exists()) {
+                    f.mkdirs();
+                }
+                try {
+                    f.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(f);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        };
+
+        picasso.with(this).load(IMAGE_BASE_URL + imagePath).into(t);
     }
 }
