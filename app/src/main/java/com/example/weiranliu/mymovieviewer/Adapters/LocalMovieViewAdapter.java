@@ -1,7 +1,9 @@
-package com.example.weiranliu.mymovieviewer.MovieRelatedClasses;
+package com.example.weiranliu.mymovieviewer.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +14,13 @@ import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
 import com.example.weiranliu.mymovieviewer.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Created by weiran.liu on 12/16/2015.
+ * Created by weiran.liu on 12/21/2015.
  */
-public class MovieViewAdapter extends ArrayAdapter {
+public class LocalMovieViewAdapter extends ArrayAdapter {
 
     private Context context;
     private int layoutResourceId;
@@ -25,8 +28,9 @@ public class MovieViewAdapter extends ArrayAdapter {
     private Picasso picasso;
 
     private final String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
+    private final String IMAGE_FOLDER_PATH = "/MyMovieViewer/img";
 
-    public MovieViewAdapter(Context context, int layoutResourceId, ArrayList data){
+    public LocalMovieViewAdapter(Context context, int layoutResourceId, ArrayList data){
         super(context, layoutResourceId, data);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
@@ -49,7 +53,10 @@ public class MovieViewAdapter extends ArrayAdapter {
         else {
             holder = (ViewHolder) row.getTag();
         }
-        Picasso.with(context).load(IMAGE_BASE_URL + data.get(position).backdrop_path).placeholder(R.drawable.place_holder).
+        String filePath = Environment.getExternalStorageDirectory().toString() + IMAGE_FOLDER_PATH + data.get(position).backdrop_path;
+        Log.d("LOCAL MOVIE", "FILE PATH: " + filePath);
+        File f = new File(filePath);
+        Picasso.with(context).load(f).placeholder(R.drawable.place_holder).
                 error(R.drawable.no_image).fit().centerCrop().into(holder.imageView);
         return row;
     }

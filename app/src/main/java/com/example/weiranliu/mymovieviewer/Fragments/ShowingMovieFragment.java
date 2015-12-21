@@ -2,6 +2,7 @@ package com.example.weiranliu.mymovieviewer.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,7 +16,7 @@ import com.example.weiranliu.mymovieviewer.Activities.MovieOverviewActivity;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieList;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieService;
-import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieViewAdapter;
+import com.example.weiranliu.mymovieviewer.Adapters.MovieViewAdapter;
 import com.example.weiranliu.mymovieviewer.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -52,6 +53,9 @@ public class ShowingMovieFragment extends Fragment {
     private ArrayList<Movie> mMovieList;
     private int mLoadedPageCount = 0;
     private MovieService ms;
+
+    private boolean loadingMore = false;
+    private boolean
 
     private final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
     private final String DEBUG_TAG = "ShowingMovieFragment";
@@ -156,7 +160,7 @@ public class ShowingMovieFragment extends Fragment {
             public void success(MovieList movieList, Response response) {
                 Log.d(DEBUG_TAG, "size:" + movieList.results.size());
                 loadMovieGridView(movieList);
-                mLoadedPageCount ++;
+                mLoadedPageCount++;
             }
 
             @Override
@@ -188,5 +192,14 @@ public class ShowingMovieFragment extends Fragment {
                 startActivity(toMovieOverviewIntent);
             }
         });
+    }
+
+    private class loadNextPageOfMovies extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+        }
+
     }
 }

@@ -11,7 +11,7 @@ import android.widget.GridView;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieList;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieService;
-import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieViewAdapter;
+import com.example.weiranliu.mymovieviewer.Adapters.MovieViewAdapter;
 import com.example.weiranliu.mymovieviewer.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

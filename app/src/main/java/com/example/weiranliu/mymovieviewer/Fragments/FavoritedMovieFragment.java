@@ -11,17 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.example.weiranliu.mymovieviewer.Activities.MovieOverviewActivity;
+import com.example.weiranliu.mymovieviewer.Adapters.LocalMovieViewAdapter;
 import com.example.weiranliu.mymovieviewer.DatabaseComponents.MovieContract;
 import com.example.weiranliu.mymovieviewer.DatabaseComponents.MovieDbHelper;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Genre;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Language;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
-import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.MovieViewAdapter;
+import com.example.weiranliu.mymovieviewer.Adapters.MovieViewAdapter;
 import com.example.weiranliu.mymovieviewer.R;
 import com.example.weiranliu.mymovieviewer.Utils.Toaster;
 
@@ -46,7 +46,7 @@ public class FavoritedMovieFragment extends Fragment {
 
     private Toaster mToaster;
     private GridView mGridView;
-    private MovieViewAdapter mAdapter;
+    private LocalMovieViewAdapter mAdapter;
     private ArrayList<Movie> mMovieList;
     private int mLoadedPageCount = 0;
     private MovieDbHelper mDbHelper;
@@ -216,7 +216,7 @@ public class FavoritedMovieFragment extends Fragment {
 
     private void loadMovieGridView() {
 
-        mAdapter = new MovieViewAdapter(getContext(), R.layout.movie_item_layout, mMovieList);
+        mAdapter = new LocalMovieViewAdapter(getContext(), R.layout.movie_item_layout, mMovieList);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
