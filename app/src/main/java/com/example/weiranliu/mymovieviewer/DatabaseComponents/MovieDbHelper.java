@@ -17,11 +17,12 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     private static final String REAL_TYPE = " REAL";
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
+    private static final String UNIQUE_SIGN = " UNIQUE";
     private static final String SQL_CREATE_TABLE =
 
             "CREATE TABLE " + MovieContract.MovieEntry.TABLE_NAME + " (" +
                     MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY," +
-                    MovieContract.MovieEntry.COLUMN_NAME_MOVIE_ID + TEXT_TYPE + COMMA_SEP +
+                    MovieContract.MovieEntry.COLUMN_NAME_MOVIE_ID + TEXT_TYPE + UNIQUE_SIGN + COMMA_SEP +
                     MovieContract.MovieEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     MovieContract.MovieEntry.COLUMN_NAME_IMAGE + TEXT_TYPE + COMMA_SEP +
                     MovieContract.MovieEntry.COLUMN_NAME_OVERVIEW + TEXT_TYPE + COMMA_SEP +

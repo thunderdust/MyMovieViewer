@@ -2,9 +2,11 @@ package com.example.weiranliu.mymovieviewer.Activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -63,7 +65,7 @@ public class MovieOverviewActivity extends AppCompatActivity {
     private Toaster mToaster;
     private boolean mIsMovieFavorited;
 
-    private final String IMAGE_FOLDER_PATH = "MyMovieViewer/img/";
+    private final String IMAGE_FOLDER_PATH = "/MyMovieViewer/img/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,14 @@ public class MovieOverviewActivity extends AppCompatActivity {
                 .setLog(new AndroidLog("NETWORK"))
                 .build()).create(MovieService.class);
         getMovieDetails(mMovieId);
-        setButtons();
+
 
         mDbHelper = new MovieDbHelper(this);
         mMovieDB = mDbHelper.getWritableDatabase();
         mToaster = new Toaster(this);
         mIsMovieFavorited = false;
+
+        setButtons();
     }
 
     public void getMovieDetails(int id) {
@@ -152,6 +156,21 @@ public class MovieOverviewActivity extends AppCompatActivity {
             }
         });
 
+        // Query to check if current movie already in favorited list
+        final String CHECK_QUERY = "SELECT " + MovieContract.MovieEntry.COLUMN_NAME_MOVIE_ID +
+        " FROM " + MovieContract.MovieEntry.TABLE_NAME + " WHERE " + MovieContract.MovieEntry
+                .COLUMN_NAME_MOVIE_ID + "='" + mMovieId + "'";
+        Cursor c = mMovieDB.rawQuery(CHECK_QUERY, null);
+        if (c.getCount()>0) {
+            // Already in favorite list
+            mIsMovieFavorited = true;
+            mFavoriteButton.setImageResource(R.drawable.favorited);
+        } else {
+            mIsMovieFavorited = false;
+            mFavoriteButton.setImageResource(R.drawable.favorite);
+        }
+
+
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +179,7 @@ public class MovieOverviewActivity extends AppCompatActivity {
                     if (mMovie != null) {
                         if (saveFavoritedMovieInDB(mMovie)) {
                             saveImage(mMovie.backdrop_path);
+                            //new imageSaveTask().execute(mMovie.backdrop_path);
                             mIsMovieFavorited = true;
                             mToaster.toastLong(mMovie.title + " has been added to your favorite list.");
                             mFavoriteButton.setImageResource(R.drawable.favorited);
@@ -172,9 +192,14 @@ public class MovieOverviewActivity extends AppCompatActivity {
                     }
                 } else {
                     // delete favorited movie
-                    mIsMovieFavorited = false;
-                    mFavoriteButton.setImageResource(R.drawable.favorite);
-                    mToaster.toastShort("Canceled Favorite");
+                    int deletedCount = mMovieDB.delete(MovieContract.MovieEntry
+                            .TABLE_NAME, MovieContract.MovieEntry.COLUMN_NAME_MOVIE_ID + "=" +
+                            mMovieId, null);
+                    if (deletedCount>0) {
+                        mIsMovieFavorited = false;
+                        mFavoriteButton.setImageResource(R.drawable.favorite);
+                        mToaster.toastShort("Canceled Favorite");
+                    }
                 }
             }
         });
@@ -238,14 +263,17 @@ public class MovieOverviewActivity extends AppCompatActivity {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
-                String filePath = IMAGE_FOLDER_PATH + imagePath;
-                File f = new File(Environment.getExternalStorageDirectory(), filePath);
-                if (!f.exists()) {
-                    f.mkdirs();
+
+                File imageFolder = new File(Environment.getExternalStorageDirectory().toString() +
+                        IMAGE_FOLDER_PATH);
+                Log.d(DEBUG_TAG, "FOLDER PATH: " + imageFolder.getPath());
+                if (!imageFolder.exists()) {
+                    imageFolder.mkdirs();
                 }
+                File outputFile = new File(imageFolder, imagePath);
                 try {
-                    f.createNewFile();
-                    FileOutputStream fos = new FileOutputStream(f);
+                    outputFile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(outputFile);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
                     fos.close();
                 } catch (Exception e) {
@@ -263,5 +291,23 @@ public class MovieOverviewActivity extends AppCompatActivity {
         };
 
         picasso.with(this).load(IMAGE_BASE_URL + imagePath).into(t);
+    }
+
+    private class imageSaveTask extends AsyncTask<String, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(String... paths) {
+            saveImage(paths[0]);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            Log.d(DEBUG_TAG, "Image save progress: " + progress[0]);
+        }
+
+        protected void onPostExecute(Void result) {
+            Log.d(DEBUG_TAG, "Imaeg save completed");
+        }
     }
 }

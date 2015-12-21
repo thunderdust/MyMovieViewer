@@ -55,7 +55,7 @@ public class ShowingMovieFragment extends Fragment {
     private MovieService ms;
 
     private boolean loadingMore = false;
-    private boolean
+
 
     private final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
     private final String DEBUG_TAG = "ShowingMovieFragment";
@@ -192,14 +192,5 @@ public class ShowingMovieFragment extends Fragment {
                 startActivity(toMovieOverviewIntent);
             }
         });
-    }
-
-    private class loadNextPageOfMovies extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-
-        }
-
     }
 }
