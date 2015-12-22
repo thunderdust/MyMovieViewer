@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import com.example.weiranliu.mymovieviewer.Activities.MovieOverviewActivity;
 import com.example.weiranliu.mymovieviewer.MovieRelatedClasses.Movie;
@@ -49,12 +51,14 @@ public class ShowingMovieFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private GridView mGridView;
+    private ProgressBar mProgressBar;
     private MovieViewAdapter mAdapter;
     private ArrayList<Movie> mMovieList;
     private int mLoadedPageCount = 0;
     private MovieService ms;
 
-    private boolean loadingMore = false;
+    private boolean loadingMore = true;
+    private boolean stopLoadingData = false;
 
 
     private final String API_KEY = "672dddea9cff27c1f8b77648cceee804";
@@ -84,23 +88,17 @@ public class ShowingMovieFragment extends Fragment {
             mFragmentPageCount = getArguments().getInt(FRAGMENT_PAGE_COUNT, 0);
             mFragmentTitle = getArguments().getString(FRAGMENT_TITLE);
         }
-        Gson gson = (new GsonBuilder()).create();
-        ms = (new RestAdapter.Builder()
-                .setEndpoint("http://api.themoviedb.org/3/")
-                .setConverter(new GsonConverter(gson))
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new AndroidLog("NETWORK"))
-                .build()).create(MovieService.class);
-        // must execute before initiate movie view adapter to get the image URLs
-        getShowingMovies(1);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_showing_movie, container, false);
+        View root = inflater.inflate(R.layout.fragment_showing_movie, container, false);
+        initializeGridView(root);
+        initializeMovieComponents();
+        getShowingMovies(mLoadedPageCount + 1);
+        return root;
     }
 
     @Override
@@ -135,6 +133,53 @@ public class ShowingMovieFragment extends Fragment {
         public void onShowingMovieFragmentInteraction(String s);
     }
 
+    public void initializeMovieComponents() {
+        mMovieList = new ArrayList<Movie>();
+        Gson gson = (new GsonBuilder()).create();
+        ms = (new RestAdapter.Builder()
+                .setEndpoint("http://api.themoviedb.org/3/")
+                .setConverter(new GsonConverter(gson))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLog(new AndroidLog("NETWORK"))
+                .build()).create(MovieService.class);
+    }
+
+    public void initializeGridView(View root) {
+        mGridView = (GridView) root.findViewById(R.id.gv_showing_movies);
+        mProgressBar = (ProgressBar) root.findViewById(R.id.pb_loading_movies);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie item = (Movie) parent.getItemAtPosition(position);
+                int movieId = item.id;
+                Log.d(DEBUG_TAG, "Movie ID: " + movieId);
+                Intent toMovieOverviewIntent = new Intent(getActivity(), MovieOverviewActivity.class);
+                toMovieOverviewIntent.putExtra("id", movieId);
+                startActivity(toMovieOverviewIntent);
+            }
+        });
+        // Scroll event listener for Lazy Loading
+        mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Log.d(DEBUG_TAG, "On scrolling");
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                int lastVisibleItem = firstVisibleItem + visibleItemCount;
+                // End of current list and no more loading
+                if (lastVisibleItem == totalItemCount && !loadingMore) {
+                    if (!stopLoadingData) {
+                        // TODO: Load next page of data
+                        getShowingMovies(mLoadedPageCount + 1);
+                    }
+                }
+            }
+        });
+    }
+
+
     public void getMovieById(int id) {
 
         Callback<Movie> callback = new Callback<Movie>() {
@@ -158,9 +203,12 @@ public class ShowingMovieFragment extends Fragment {
         Callback<MovieList> cb = new Callback<MovieList>() {
             @Override
             public void success(MovieList movieList, Response response) {
+                loadingMore = false;
                 Log.d(DEBUG_TAG, "size:" + movieList.results.size());
-                loadMovieGridView(movieList);
+                setMovieGridView(movieList);
                 mLoadedPageCount++;
+                // Hide progress bar
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -168,29 +216,21 @@ public class ShowingMovieFragment extends Fragment {
                 Log.d(DEBUG_TAG, error.getMessage());
             }
         };
+        loadingMore = true;
+        // Display progress bar
+        mProgressBar.setVisibility(View.VISIBLE);
         ms.loadShowingMovies(API_KEY, page, cb);
     }
 
-    private void loadMovieGridView(MovieList ml) {
+    private void setMovieGridView(MovieList ml) {
 
-        Log.d(DEBUG_TAG, "loading movie gridviews.");
-        mMovieList = new ArrayList<Movie>();
+        // record current position
+        int currentPosition = mGridView.getFirstVisiblePosition();
         for (Movie m : ml.results) {
             mMovieList.add(m);
         }
-        mGridView = (GridView) getActivity().findViewById(R.id.gv_showing_movies);
         mAdapter = new MovieViewAdapter(getContext(), R.layout.movie_item_layout, mMovieList);
         mGridView.setAdapter(mAdapter);
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Movie item = (Movie) parent.getItemAtPosition(position);
-                int movieId = item.id;
-                Log.d(DEBUG_TAG, "Movie ID: " + movieId);
-                Intent toMovieOverviewIntent = new Intent(getActivity(), MovieOverviewActivity.class);
-                toMovieOverviewIntent.putExtra("id", movieId);
-                startActivity(toMovieOverviewIntent);
-            }
-        });
+        mGridView.setSelection(currentPosition + 1);
     }
 }

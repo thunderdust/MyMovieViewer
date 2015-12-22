@@ -4,17 +4,25 @@
     android:layout_height="match_parent"
     tools:context="com.example.weiranliu.mymovieviewer.Fragments.ShowingMovieFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <GridView
         android:id="@+id/gv_showing_movies"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:stretchMode="columnWidth"
-        android:numColumns="2"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:focusable="true"
         android:clickable="true"
-        />
+        android:focusable="true"
+        android:horizontalSpacing="0dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading_movies"
+        style="@style/Widget.AppCompat.Spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
 </FrameLayout>
